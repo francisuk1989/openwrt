@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: (GPL-2.0-or-later OR MIT)
+#include "bcm63178.dtsi"
+
+/ {
+	model = "AVM FRITZ!Box 7530 AX";
+	compatible = "avm,fritzbox-7530-ax", "brcm,bcm63178", "brcm,bcmbca";
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	/*
+	 * Reports a 512MiB SDRAM address space.
+	 * Keep this explicit for early bring-up until the bootloader's
+	 * DT fixups / usable-memory behaviour are fully documented.
+	 */
+	memory@0 {
+		device_type = "memory";
+		reg = <0x00000000 0x20000000>;
+	};
+};
+
+/*
+ * BCM63178 uses an ARM PL011 UART in the upstream SoC description.
+ * This is the first peripheral enabled for serial bring-up.
+ */
+&uart0 {
+	status = "okay";
+};
+
+/*
+ * BCM63178 upstream Linux describes the Broadcom NAND controller.
+ */
+&nand_controller {
+	status = "okay";
+};
+
+&nandcs {
+	nand-on-flash-bbt;
+	brcm,nand-ecc-use-strap;
+};
+
