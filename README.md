@@ -20,43 +20,11 @@ The FRITZ!Box 7530 non-AX HW236 rev2 work currently includes hardware features t
 RAM booting is preferred while testing experimental hardware changes.
 
 **AVM FRITZ!Box 7530 AX (HW256)**.
-
-https://github.com/francisuk1989/openwrt/blob/main/target/linux/bmips/dts/bcm63178-avm-fritzbox-7530-ax.dts
-
-Experimental OpenWrt development and hardware research for the
-
+**uses a Broadcom BCM63178 platform**
 > [!WARNING]
-> This project is experimental.
->
-> Do not flash images to NAND unless you understand the boot layout,
-> recovery procedure, and risks involved.
->
-> Preserve a complete backup of the original flash before making
-> persistent changes.
-
+> OpenWrt dos not have support for the BCM63178
+> Do not flash images to NAND unless you understand the recovery procedure, and risks involved.
 ---
-
-## Device
-
-| Component | Details |
-|---|---|
-| Manufacturer | AVM |
-| Model | FRITZ!Box 7530 AX |
-| AVM Hardware ID | HW256 |
-| HWRevision | 256 |
-| HWSubRevision | 4 |
-| Product ID | `Fritz_Box_HW256` |
-| SoC | Broadcom BCM63178 |
-| RAM | 512 MiB |
-| NAND | 128 MiB |
-| NAND erase size | 128 KiB |
-| Boot layout | Dual FIT firmware slots |
-
-The FRITZ!Box 7530 AX is substantially different from the original
-FRITZ!Box 7530 non-AX (HW236).
-
-The **7530 AX / HW256 uses a Broadcom BCM63178 platform** and should
-therefore not be confused with the Qualcomm IPQ4019-based HW236.
 
 ---
 
