@@ -21,6 +21,8 @@ RAM booting is preferred while testing experimental hardware changes.
 
 **AVM FRITZ!Box 7530 AX (HW256)**.
 
+https://github.com/francisuk1989/openwrt/blob/main/target/linux/bmips/dts/bcm63178-avm-fritzbox-7530-ax.dts
+
 Experimental OpenWrt development and hardware research for the
 
 > [!WARNING]
