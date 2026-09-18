@@ -33,10 +33,63 @@ fi
 
 # ---- Multicast/IPTV-related bridge features ----
 # Disable IGMP/MLD snooping and multicast querier on every bridge device.
+# This intentionally breaks IGMP/MLD, mDNS/Bonjour, SSDP/UPnP discovery,
+# IPTV multicast, IPv6 ND/RA and normal IPv6 operation.
+
+logger -t uci-defaults "Installing strict multicast suppression"
+
+# Disable bridge multicast snooping/querier.
 for section in $(uci -q show network | sed -n "s/^network\.\([^.=]*\)=device$/\1/p"); do
 	[ "$(uci -q get "network.${section}.type")" = "bridge" ] || continue
 	uci -q set "network.${section}.igmp_snooping='0'"
 	uci -q set "network.${section}.multicast_querier='0'"
+done
+uci -q set network.lan.igmp_snooping='0'
+uci -q set network.lan.multicast_querier='0'
+uci -q commit network
+
+# firewall4 supports nftables includes inserted into specific chains.
+mkdir -p /etc/nftables.d
+
+cat > /etc/nftables.d/98-multicast-input.nft <<'EOF'
+ip daddr 224.0.0.0/4 counter drop comment "drop IPv4 multicast input"
+ip6 daddr ff00::/8 counter drop comment "drop IPv6 multicast input"
+EOF
+
+cat > /etc/nftables.d/98-multicast-forward.nft <<'EOF'
+ip daddr 224.0.0.0/4 counter drop comment "drop IPv4 multicast forward"
+ip6 daddr ff00::/8 counter drop comment "drop IPv6 multicast forward"
+EOF
+
+cat > /etc/nftables.d/98-multicast-output.nft <<'EOF'
+ip daddr 224.0.0.0/4 counter drop comment "drop IPv4 multicast output"
+ip6 daddr ff00::/8 counter drop comment "drop IPv6 multicast output"
+EOF
+
+# Idempotent if run manually more than once.
+for sec in multicast_input multicast_forward multicast_output; do
+	uci -q delete "firewall.$sec"
+done
+
+uci set firewall.multicast_input='include'
+uci set firewall.multicast_input.type='nftables'
+uci set firewall.multicast_input.path='/etc/nftables.d/98-multicast-input.nft'
+uci set firewall.multicast_input.position='chain-pre'
+uci set firewall.multicast_input.chain='input'
+uci set firewall.multicast_forward='include'
+uci set firewall.multicast_forward.type='nftables'
+uci set firewall.multicast_forward.path='/etc/nftables.d/98-multicast-forward.nft'
+uci set firewall.multicast_forward.position='chain-pre'
+uci set firewall.multicast_forward.chain='forward'
+uci set firewall.multicast_output='include'
+uci set firewall.multicast_output.type='nftables'
+uci set firewall.multicast_output.path='/etc/nftables.d/98-multicast-output.nft'
+uci set firewall.multicast_output.position='chain-pre'
+uci set firewall.multicast_output.chain='output'
+uci commit firewall
+
+logger -t uci-defaults "Strict multicast suppression installed"
+
 done
 
 # Compatibility with configurations where bridge options live on the LAN interface.
