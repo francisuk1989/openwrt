@@ -1,0 +1,58 @@
+#!/bin/sh
+#   OpenWrt first-boot defaults
+# - Disable IPv6 configuration/services
+# - Disable bridge multicast snooping/querier
+# - Set every Wi-Fi radio to GB and automatic channel selection
+
+logger -t uci-defaults "Applying FRITZ!Box 7530 HW236 IPv4/Wi-Fi defaults"
+
+# ---- IPv6: remove the generated WAN6 interface and IPv6 assignments ----
+uci -q delete network.wan6
+uci -q delete network.globals.ula_prefix
+
+# Do not request IPv6 over PPPoE/DHCP WAN.
+uci -q set network.wan.ipv6='0'
+
+# Remove IPv6 prefix assignment/delegation from all configured interfaces.
+for section in $(uci -q show network | sed -n "s/^network\.\([^.=]*\)=interface$/\1/p"); do
+	uci -q delete "network.${section}.ip6assign"
+	uci -q delete "network.${section}.ip6hint"
+	uci -q delete "network.${section}.ip6class"
+	uci -q set "network.${section}.delegate='0'"
+done
+
+# LAN: disable RA, DHCPv6 and NDP service.
+uci -q set dhcp.lan.ra='disabled'
+uci -q set dhcp.lan.dhcpv6='disabled'
+uci -q set dhcp.lan.ndp='disabled'
+
+# Disable the odhcpd service if present. dnsmasq continues to provide IPv4 DHCP.
+if [ -x /etc/init.d/odhcpd ]; then
+	/etc/init.d/odhcpd disable >/dev/null 2>&1
+fi
+
+# ---- Multicast/IPTV-related bridge features ----
+# Disable IGMP/MLD snooping and multicast querier on every bridge device.
+for section in $(uci -q show network | sed -n "s/^network\.\([^.=]*\)=device$/\1/p"); do
+	[ "$(uci -q get "network.${section}.type")" = "bridge" ] || continue
+	uci -q set "network.${section}.igmp_snooping='0'"
+	uci -q set "network.${section}.multicast_querier='0'"
+done
+
+# Compatibility with configurations where bridge options live on the LAN interface.
+uci -q set network.lan.igmp_snooping='0'
+uci -q set network.lan.multicast_querier='0'
+
+# ---- Wireless ----
+# Apply to every detected wifi-device, so this remains valid if radio numbering changes.
+for radio in $(uci -q show wireless | sed -n "s/^wireless\.\([^.=]*\)=wifi-device$/\1/p"); do
+	uci -q set "wireless.${radio}.country='GB'"
+	uci -q set "wireless.${radio}.channel='auto'"
+done
+
+uci -q commit network
+uci -q commit dhcp
+uci -q commit wireless
+
+logger -t uci-defaults "defaults applied"
+exit 0
