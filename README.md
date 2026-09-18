@@ -1,42 +1,20 @@
 ![OpenWrt logo](include/logo.png)
 
-My custom builds for the
+Custom OpenWrt development builds for the **AVM FRITZ!Box 7530 non-AX (HW236 rev2)**.
 
-FRITZ!Box 7530 non-AX HW236 rev2
-│
-├── OpenWrt main
-│
-├── RAM boot through EVA
-│
-├── IPQ4019
-│   ├── experimental ADSS PWM work
-│   ├── QCE/AES research
-│   ├── PRNG
-│   └── watchdog
-│
-├── HW236 DTS
-│   ├── confirmed LEDs/buttons
-│   ├── GPIO31 experimental LED
-│   ├── VRX518 DSL
-│   ├── USB3
-│   ├── NAND
-│   ├── Wi-Fi/caldata
-│   └── documented TFFS/macdsl
-│
-├── USB storage
-│   ├── exFAT
-│   ├── USB Mass Storage
-│   ├── UAS
-│   ├── block-mount
-│   └── usbutils
-│
-└── custom defaults
-    ├── GB Wi-Fi regulatory domain
-    ├── automatic Wi-Fi channels
-    ├── IPv6 disabled
-    ├── multicast suppressed
-    └── Samba preserved
+These builds are based on **OpenWrt main** and are primarily intended for development, testing, and hardware investigation.
 
-## License
+## FRITZ!Box 7530 non-AX HW236 rev2
 
-OpenWrt is licensed under GPL-2.0
+## Experimental Status
+
+These are **experimental development builds**.
+
+The FRITZ!Box 7530 non-AX HW236 rev2 work currently includes hardware features that are still being investigated, particularly:
+
+- GPIO31 LED function and polarity
+- IPQ4019 ADSS PWM support
+- Qualcomm QCE/AES acceleration
+- Factory DSL/WAN MAC handling through AVM TFFS3 `macdsl`
+
+RAM booting is preferred while testing experimental hardware changes.
