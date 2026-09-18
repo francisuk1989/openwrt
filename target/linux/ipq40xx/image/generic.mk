@@ -281,7 +281,7 @@ define Device/avm_fritzbox-7530
 	DEVICE_ALT0_VENDOR := AVM
 	DEVICE_ALT0_MODEL := FRITZ!Box 7520
 	SOC := qcom-ipq4019
-	DEVICE_PACKAGES := fritz-caldata fritz-tffs-nand ltq-vdsl-vr11-app
+	DEVICE_PACKAGES := fritz-caldata fritz-tffs-nand ltq-vdsl-vr11-app kmod-usb-storage kmod-fs-exfat block-mount
 endef
 TARGET_DEVICES += avm_fritzbox-7530
 
@@ -772,7 +772,7 @@ define Device/linksys_mr9000
 	UBINIZE_OPTS := -E 5    # EOD marks to "hide" factory sig at EOF
 	IMAGES += factory.bin
 	IMAGE/factory.bin  := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | linksys-image type=MR9000
-	DEVICE_PACKAGES := ath10k-firmware-qca9984-ct ipq-wifi-linksys_mr9000 kmod-usb-ledtrig-usbport
+	DEVICE_PACKAGES := ath10k-firmware-qca9984-ct ipq-wifi-linksys_mr9000 kmod-usb-ledtrig-usbport kmod-usb-storage kmod-fs-exfat block-mount
 endef
 TARGET_DEVICES += linksys_mr9000
 
