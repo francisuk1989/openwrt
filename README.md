@@ -2,7 +2,7 @@
 
 Custom OpenWrt development builds for the **AVM FRITZ!Box 7530 non-AX (HW236 rev2)**.
 
-These builds are based on **OpenWrt main** and are primarily intended for development, testing, and hardware investigation.
+These builds are based on https://github.com/openwrt/openwrt and are primarily intended for development, testing, and hardware investigation.
 
 ## FRITZ!Box 7530 non-AX HW236 rev2
 
