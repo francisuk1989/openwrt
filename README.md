@@ -13,11 +13,15 @@ The FRITZ!Box 7530 non-AX HW236 rev2 work currently includes hardware features t
 - GPIO31 LED function and polarity
 - IPQ4019 ADSS PWM support
 - Qualcomm QCE/AES acceleration
-- Factory DSL/WAN MAC handling through AVM TFFS3 `macdsl`
+- Includes USB Storage, exFAT only
 
 RAM booting is preferred while testing experimental hardware changes.
 
-**AVM FRITZ!Box 7530 AX (HW256)**.
+**AVM FRITZ!Box 7530 AX v1 (HW256)**.
+
 **uses a Broadcom BCM63178 platform**
 > [!WARNING]
 > OpenWrt dos not have support for the BCM63178
+
+**AVM FRITZ!Box 7530 AX v2 (HW)**.
+> TBC
